@@ -30,37 +30,37 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 }
 
-?><!doctype html>
-<html lang="en">
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width,initial-scale=1">
-    <title>Create Admin — Compliance Tracker</title>
-    <link rel="stylesheet" href="assets/style.css">
-</head>
-<body class="center-page">
-    <main class="card">
+?>
+<?php include __DIR__ . '/includes/header.php'; ?>
+
+<div class="container" style="margin-top:12px;">
+    <main class="card" style="max-width:720px;margin:0 auto;">
         <h1>Create User (admin/employee)</h1>
-        <?php if ($message): ?><div class="info"><?= e($message) ?></div><?php endif; ?>
+        <?php if ($message): ?><div class="alert alert-success"><?= e($message) ?></div><?php endif; ?>
         <form method="post">
-            <label>Username
-                <input type="text" name="username" required>
-            </label>
-            <label>Email
-                <input type="email" name="email" required>
-            </label>
-            <label>Password
-                <input type="password" name="password" required>
-            </label>
-            <label>Role
-                <select name="role">
+            <div class="form-group">
+                <label>Username</label>
+                <input type="text" name="username" class="form-control" required>
+            </div>
+            <div class="form-group">
+                <label>Email</label>
+                <input type="email" name="email" class="form-control" required>
+            </div>
+            <div class="form-group">
+                <label>Password</label>
+                <input type="password" name="password" class="form-control" required>
+            </div>
+            <div class="form-group">
+                <label>Role</label>
+                <select name="role" class="form-control">
                     <option value="admin">Admin</option>
                     <option value="employee">Employee</option>
                 </select>
-            </label>
-            <button class="btn" type="submit">Create</button>
+            </div>
+            <button class="btn btn-primary" type="submit">Create</button>
         </form>
         <p class="muted small">After creating the first admin, remove or protect this file to avoid abuse.</p>
     </main>
-</body>
-</html>
+</div>
+
+<?php include __DIR__ . '/includes/footer.php'; ?>

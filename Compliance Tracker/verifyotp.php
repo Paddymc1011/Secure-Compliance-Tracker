@@ -32,116 +32,28 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['otp'])) {
     }
 }
 ?>
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Verify OTP - FrontBank</title>
-    <style>
-        body {
-            margin: 0;
-            padding: 0;
-            font-family: Arial, sans-serif;
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-        }
+<?php include __DIR__ . '/includes/header.php'; ?>
 
-        header, footer {
-            background-color: #007bff;
-            color: white;
-            padding: 1rem;
-            text-align: center;
-        }
+<div class="container" style="margin-top:18px;">
+    <main class="card" style="max-width:620px;margin:0 auto;">
+        <h2 class="center">Verify Identity</h2>
+        <p class="muted center">Enter the 6-digit code sent to your email</p>
 
-        main {
-            flex: 1;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            padding: 2rem;
-        }
+        <?php if (isset($_SESSION['status'])): ?>
+            <p class="alert alert-error"><?php echo htmlspecialchars($_SESSION['status']); ?></p>
+            <?php unset($_SESSION['status']); ?>
+        <?php endif; ?>
 
-        .form-container {
-            text-align: center;
-        }
-
-        table {
-            margin: 0 auto;
-            border-collapse: collapse;
-            width: 100%;
-            max-width: 500px;
-            background-color: #f9f9f9;
-            border: 1px solid #ccc;
-        }
-
-        th, td {
-            padding: 1rem;
-            border: 1px solid #ccc;
-        }
-
-        th {
-            background-color: #f0f0f0;
-        }
-
-        .btn {
-            background-color: #007bff;
-            color: white;
-            border: none;
-            padding: 0.75rem 1.5rem;
-            font-size: 1rem;
-            cursor: pointer;
-            border-radius: 4px;
-        }
-
-        .btn:hover {
-            background-color: #0052a3;
-        }
-
-        .error-message {
-            color: red;
-            margin-bottom: 1rem;
-        }
-    </style>
-</head>
-<body>
-    <header>
-        <div class="header-container">
-            <h1>Verify Identity</h1>
-        </div>
-    </header>
-    <main>
-        <div class="form-container">
-            <h2>Enter the 6-Digit Code</h2>
-            <?php if (isset($_SESSION['status'])): ?>
-                <p class="error-message"><?php echo htmlspecialchars($_SESSION['status']); ?></p>
-                <?php unset($_SESSION['status']); ?>
-            <?php endif; ?>
-            <form action="verify_otp.php" method="POST">
-                <table>
-                    <thead>
-                        <tr>
-                            <th colspan="2">Verify Identity</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td><label for="otp">One-Time Password (OTP):</label></td>
-                            <td><input type="text" id="otp" name="otp" maxlength="6" placeholder="Enter 6-digit code" required></td>
-                        </tr>
-                        <tr>
-                            <td colspan="2" style="text-align: center;">
-                                <button type="submit" class="btn">Verify OTP</button>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-            </form>
-        </div>
+        <form action="verifyotp.php" method="POST">
+            <div class="form-group">
+                <label for="otp">One-Time Password (OTP)</label>
+                <input type="text" id="otp" name="otp" maxlength="6" class="form-control" placeholder="Enter 6-digit code" required>
+            </div>
+            <div class="center" style="margin-top:8px;">
+                <button type="submit" class="btn btn-primary">Verify OTP</button>
+            </div>
+        </form>
     </main>
-    <footer>
-        <p>&copy; 2023 FrontBank. All rights reserved.</p>
-    </footer>
-</body>
-</html>
+</div>
+
+<?php include __DIR__ . '/includes/footer.php'; ?>

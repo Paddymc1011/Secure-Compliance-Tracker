@@ -2,7 +2,7 @@
 session_start();
 include __DIR__ . '/dbcon.php';
 
-// POST handler: authenticate admin user and redirect to admin.php on success
+// authenticate admin user and redirect to admin.php on success
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $username = trim($_POST['username'] ?? '');
     $password = $_POST['password'] ?? '';

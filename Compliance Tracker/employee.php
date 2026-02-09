@@ -35,26 +35,26 @@ include __DIR__ . '/includes/header.php';
             <h3>Categories</h3>
             <p class="muted">Quick links to common compliance areas.</p>
 
-            <div class="categories" style="margin-top:12px;display:flex;gap:12px;flex-wrap:wrap;">
-                <div class="category-card card" style="flex:1;min-width:220px;">
+            <div class="categories" style="margin-top:12px;display:grid;grid-template-columns:repeat(2, 1fr);gap:12px;">
+                <div class="category-card card">
                     <h4>Malware And Ransomware Attacks</h4>
                     <p class="muted">Please check for new Quizzes Daily</p>
-                        <p style="margin-top:10px"><a class="btn btn-primary" href="malwarequiz.php">Open</a></p>
+                    <p style="margin-top:10px"><a class="btn btn-primary" href="malwarequiz.php">Open</a></p>
                 </div>
 
-                <div class="category-card card" style="flex:1;min-width:220px;">
+                <div class="category-card card">
                     <h4>Phishing Attacks</h4>
                     <p class="muted">Please check for new Quizzes Daily</p>
                     <p style="margin-top:10px"><a class="btn btn-primary" href="phishingquiz.php">Open</a></p>
                 </div>
 
-                <div class="category-card card" style="flex:1;min-width:220px;">
+                <div class="category-card card">
                     <h4>Emerging Threats</h4>
                     <p class="muted">Please check for new Quizzes Daily</p>
                     <p style="margin-top:10px"><a class="btn btn-primary" href="emergingthreatsquiz.php">Open</a></p>
                 </div>
 
-                <div class="category-card card" style="flex:1;min-width:220px;">
+                <div class="category-card card">
                     <h4>IoT Attacks</h4>
                     <p class="muted">Please check for new Quizzes Daily</p>
                     <p style="margin-top:10px"><a class="btn btn-primary" href="iotattackquiz.php">Open</a></p>

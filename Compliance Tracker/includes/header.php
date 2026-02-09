@@ -1,5 +1,5 @@
 <?php
-// Reusable header included at the top of pages (after any PHP processing)
+// Reusable header included at the top of pages 
 ?>
 <!doctype html>
 <html lang="en">

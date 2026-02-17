@@ -16,9 +16,11 @@ $success = '';
 /* ================= FETCH QUIZZES ================= */
 $quizzes = [];
 $result = $connection->query(
-    "SELECT quiz_id, title, due_date, created_at
+    "SELECT quiz.quiz_id, quiz.title, quiz.due_date, question.question_text, options.option_text, options.is_correct
      FROM quiz
-     ORDER BY created_at DESC"
+     LEFT JOIN question ON quiz.quiz_id = question.quiz_id
+     LEFT JOIN options ON question.question_id = options.question_id
+     ORDER BY quiz.created_at DESC"
 );
 while ($row = $result->fetch_assoc()) {
     $quizzes[] = $row;
@@ -27,7 +29,7 @@ while ($row = $result->fetch_assoc()) {
 /* ================= FETCH EMPLOYEES ================= */
 $users = [];
 $result = $connection->query(
-    "SELECT id, username
+    "SELECT user_id, username
      FROM users
      WHERE role = 'employee'
      ORDER BY username"
@@ -37,60 +39,25 @@ while ($row = $result->fetch_assoc()) {
 }
 
 /* ================= ASSIGN QUIZ ================= */
-$categoryPages = [
-    'Malware and Ransomware Attacks' => 'malware.php',
-    'Phishing Attacks' => 'phishingquiz.php',
-    'Emerging Threats' => 'emergingthreatsquiz.php',
-    'IoT Attacks' => 'iotattackquiz.php',
-];
-
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['assign_quiz'])) {
     $quiz_id = (int)$_POST['quiz_id'];
     $user_id = (int)$_POST['user_id'];
-    $category = trim($_POST['category']);
 
-    // Validate category input
-    if (!array_key_exists($category, $categoryPages)) {
-        $error = 'Invalid category selected.';
-    } elseif ($quiz_id > 0 && $user_id > 0) {
+    if ($quiz_id > 0 && $user_id > 0) {
         try {
-            $stmt = $connection->prepare("INSERT INTO user_quizzes (quiz_id, user_id, category, status) VALUES (?, ?, ?, 'assigned')");
-            $stmt->bind_param('iis', $quiz_id, $user_id, $category);
+            // Assign quiz by storing the quiz_id and user_id in a log table or tracking system
+            $stmt = $connection->prepare("INSERT INTO quiz_assignments (quiz_id, user_id, assigned_at) VALUES (?, ?, NOW())");
+            $stmt->bind_param('ii', $quiz_id, $user_id);
             $stmt->execute();
             $stmt->close();
 
-            // Redirect to the appropriate page
-            header("Location: " . $categoryPages[$category]);
-            exit;
+            $success = 'Quiz assigned successfully!';
         } catch (Exception $e) {
             $error = 'Failed to assign quiz: ' . $e->getMessage();
         }
     } else {
-        $error = 'Please select a valid quiz, user, and category.';
+        $error = 'Please select a valid quiz and user.';
     }
-}
-
-/* ================= FETCH QUIZ PREVIEW ================= */
-$quizDetails = [];
-$result = $connection->query(
-    "SELECT q.quiz_id,
-            qq.id AS question_id,
-            qq.question_text,
-            o.option_text,
-            o.is_correct
-     FROM quiz q
-     JOIN quiz_questions qq ON q.quiz_id = qq.quiz_id
-     JOIN options o ON qq.id = o.question_id
-     ORDER BY q.quiz_id, qq.id, o.id"
-);
-
-while ($row = $result->fetch_assoc()) {
-    $quizDetails[$row['quiz_id']]['questions'][$row['question_id']]['text'] = $row['question_text'];
-
-    $quizDetails[$row['quiz_id']]['questions'][$row['question_id']]['options'][] = [
-        'text' => $row['option_text'],
-        'is_correct' => $row['is_correct'],
-    ];
 }
 
 include __DIR__ . '/includes/header.php';
@@ -107,82 +74,33 @@ include __DIR__ . '/includes/header.php';
 <div class="alert alert-success"><?= htmlspecialchars($success) ?></div>
 <?php endif; ?>
 
-<form method="post">
+<form method="POST">
     <div class="form-group">
-        <label>Select Quiz</label>
+        <label for="quiz_id">Select Quiz:</label>
         <select name="quiz_id" id="quiz_id" class="form-control" required>
-            <option value="">-- Select Quiz --</option>
+            <option value="">-- Select a Quiz --</option>
             <?php foreach ($quizzes as $quiz): ?>
                 <option value="<?= $quiz['quiz_id'] ?>">
-                    <?= htmlspecialchars($quiz['title']) ?>
+                    <?= htmlspecialchars($quiz['title']) ?> (Due: <?= htmlspecialchars($quiz['due_date']) ?>)
                 </option>
             <?php endforeach; ?>
         </select>
     </div>
 
     <div class="form-group">
-        <label>Select Employee</label>
-        <select name="user_id" class="form-control" required>
-            <option value="">-- Select Employee --</option>
+        <label for="user_id">Assign to Employee:</label>
+        <select name="user_id" id="user_id" class="form-control" required>
+            <option value="">-- Select an Employee --</option>
             <?php foreach ($users as $user): ?>
-                <option value="<?= $user['id'] ?>">
+                <option value="<?= $user['user_id'] ?>">
                     <?= htmlspecialchars($user['username']) ?>
                 </option>
             <?php endforeach; ?>
         </select>
     </div>
 
-    <div class="form-group">
-        <label for="category">Category</label>
-        <select name="category" id="category" class="form-control" required>
-            <option value="">-- Select a Category --</option>
-            <?php foreach ($categoryPages as $category => $page): ?>
-                <option value="<?php echo htmlspecialchars($category); ?>">
-                    <?php echo htmlspecialchars($category); ?>
-                </option>
-            <?php endforeach; ?>
-        </select>
-    </div>
-
-    <button type="submit" name="assign_quiz" class="btn btn-primary">
-        Assign Quiz
-    </button>
+    <button type="submit" name="assign_quiz" class="btn btn-primary">Assign Quiz</button>
 </form>
-
-<hr>
-
-<h3>Quiz Preview</h3>
-<div id="quiz_questions">Select a quiz to preview.</div>
 </div>
-
-<script>
-const quizDetails = <?= json_encode($quizDetails) ?>;
-
-document.getElementById('quiz_id').addEventListener('change', function () {
-    const quizId = this.value;
-    const container = document.getElementById('quiz_questions');
-    container.innerHTML = '';
-
-    if (!quizDetails[quizId]) {
-        container.innerHTML = '<p>No questions found.</p>';
-        return;
-    }
-
-    Object.values(quizDetails[quizId].questions).forEach(q => {
-        const div = document.createElement('div');
-        div.innerHTML = `<strong>${q.text}</strong>`;
-
-        const ul = document.createElement('ul');
-        q.options.forEach(o => {
-            const li = document.createElement('li');
-            li.textContent = o.text + (o.is_correct ? ' (Correct)' : '');
-            ul.appendChild(li);
-        });
-
-        div.appendChild(ul);
-        container.appendChild(div);
-    });
-});
-</script>
 
 <?php include __DIR__ . '/includes/footer.php'; ?>

@@ -7,7 +7,7 @@ require_role('admin');
 $users = [];
 try {
     // Update the SQL query to use the simplified table name 'users'
-    $sql = "SELECT id, username, password, role, created_at FROM users ORDER BY id DESC";
+    $sql = "SELECT user_id, username, password, role, created_at FROM users ORDER BY user_id DESC";
     $result = $connection->query($sql);
     if ($result) {
         while ($row = $result->fetch_assoc()) {
@@ -52,7 +52,7 @@ try {
                     <table class="table" role="table">
                         <thead>
                             <tr>
-                                <th scope="col">ID</th>
+                                <th scope="col">USER_ID</th>
                                 <th scope="col">Username</th>
                                 <th scope="col">Password (hash)</th>
                                 <th scope="col">Role</th>
@@ -63,7 +63,7 @@ try {
                         <tbody>
                         <?php foreach ($users as $u): ?>
                             <tr>
-                                <td><?= e($u['id']) ?></td>
+                                <td><?= e($u['user_id']) ?></td>
                                 <td><?= e($u['username']) ?></td>
                                 <td><code title="<?= e($u['password']) ?>"><?= e($u['password']) ?></code></td>
                                 <td><?= e($u['role']) ?></td>
@@ -71,7 +71,7 @@ try {
                                 <td>
                                     <div class="table-actions">
                                         <form method="post" action="admin_delete_user.php" onsubmit="return confirm('Are you sure you want to delete user <?= addslashes(e($u['username'])) ?>? This action cannot be undone.');" style="display:inline">
-                                            <input type="hidden" name="user_id" value="<?= (int)$u['id'] ?>">
+                                            <input type="hidden" name="user_id" value="<?= (int)$u['user_id'] ?>">
                                             <button type="submit" class="btn btn-danger">Delete</button>
                                         </form>
                                     </div>

@@ -29,7 +29,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 
     // Check username uniqueness
-    $checkSql = "SELECT id FROM users WHERE username = ? LIMIT 1";
+    $checkSql = "SELECT user_id FROM users WHERE username = ? LIMIT 1";
     $checkStmt = $connection->prepare($checkSql);
     if ($checkStmt) {
         $checkStmt->bind_param("s", $username);
@@ -42,14 +42,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
     }
 
-    // Generate a unique 6-digit numeric ID and ensure it's not already in users.id
+    // Generate a unique 6-digit numeric ID and ensure it's not already in users.user_id
     $userId = generateUniqueUserId($connection);
 
     // Hash the provided password using password_hash
     $hash = password_hash($password, PASSWORD_DEFAULT);
 
-    // Insert into users table explicitly including `id` column
-    $insertSql = "INSERT INTO users (id, username, password, role, created_at) VALUES (?, ?, ?, ?, NOW())";
+    // Insert into users table explicitly including `user_id` column
+    $insertSql = "INSERT INTO users (user_id, username, password, role, created_at) VALUES (?, ?, ?, ?, NOW())";
     $insertStmt = $connection->prepare($insertSql);
     if ($insertStmt) {
         $insertStmt->bind_param("isss", $userId, $username, $hash, $role);
@@ -71,7 +71,7 @@ function generateUniqueUserId($connection) {
     // 6-digit numeric ID
     do {
         $id = rand(100000, 999999);
-        $sql = "SELECT id FROM users WHERE id = ? LIMIT 1";
+        $sql = "SELECT user_id FROM users WHERE user_id = ? LIMIT 1";
         $stmt = $connection->prepare($sql);
         if (!$stmt) return $id; // if prepare fails, return the id and let the DB error surface
         $stmt->bind_param("i", $id);

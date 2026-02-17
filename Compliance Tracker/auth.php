@@ -33,6 +33,8 @@ function require_login() {
 function require_role($role) {
     require_login();
     if (empty($_SESSION['role']) || $_SESSION['role'] !== $role) {
+        // Debugging output for session data
+        error_log('403 Forbidden: Access denied. Session role: ' . ($_SESSION['role'] ?? 'not set'));
         http_response_code(403);
         echo "<h2>403 Forbidden</h2><p>You do not have permission to access this page.</p>";
         exit;

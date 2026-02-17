@@ -1,4 +1,9 @@
 <?php
+// Enable error reporting for debugging
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
+
 session_start();
 include __DIR__ . '/dbcon.php';
 
@@ -13,7 +18,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         exit();
     }
 
-    $sql = 'SELECT id, username, password, role FROM users WHERE username = ? LIMIT 1';
+    $sql = 'SELECT user_id, username, password, role FROM users WHERE username = ? LIMIT 1';
     $stmt = $connection->prepare($sql);
     if (!$stmt) {
         $_SESSION['status'] = 'Database error.';
@@ -30,7 +35,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $hash = $row['password'];
         if (password_verify($password, $hash)) {
             // authentication successful
-            $_SESSION['user_id'] = (int)$row['id'];
+            $_SESSION['user_id'] = (int)$row['user_id'];
             $_SESSION['username'] = $row['username'];
             $_SESSION['role'] = $row['role'] ?? '';
             unset($_SESSION['status']);

@@ -27,7 +27,6 @@ include __DIR__ . '/includes/header.php';
         <!-- Compliance Quiz placeholder (content coming soon) -->
         <section style="margin-top:18px;">
             <h3>Compliance Quiz</h3>
-            <p class="muted">This area will show assigned compliance quizzes. Content coming soon.</p>
         </section>
 
         <!-- Categories: at least 3 separate categories -->

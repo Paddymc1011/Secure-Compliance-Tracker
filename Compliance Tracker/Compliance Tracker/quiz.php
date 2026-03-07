@@ -13,15 +13,16 @@ require_role('admin');
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $title = $_POST['title'] ?? '';
     $due_date = $_POST['due_date'] ?? '';
+    $category = $_POST['category'] ?? 'malware';
     $questions = $_POST['questions'] ?? [];
 
     if (empty($title) || empty($due_date) || empty($questions)) {
         die("All fields are required.");
     }
 
-    // Insert the quiz
-    $stmt = $connection->prepare("INSERT INTO quiz (title, due_date) VALUES (?, ?)");
-    $stmt->bind_param("ss", $title, $due_date);
+    // Insert the quiz (including category)
+    $stmt = $connection->prepare("INSERT INTO quiz (title, due_date, category) VALUES (?, ?, ?)");
+    $stmt->bind_param("sss", $title, $due_date, $category);
     $stmt->execute();
     $last_quiz_id = $connection->insert_id;
     $stmt->close();
@@ -128,9 +129,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <label for="due_date">Due Date:</label>
             <input type="date" name="due_date" id="due_date" required>
 
+            <label for="category">Category:</label>
+            <select name="category" id="category" required>
+                <option value="malware" selected>Malware &amp; Ransomware</option>
+                <option value="phishing">Phishing</option>
+                <option value="iot">IoT</option>
+                <option value="emerging">Emerging Threats</option>
+            </select>
+
             <div id="questions-container">
                 <h3>Questions</h3>
-                <button type="button" onclick="addQuestion()">Add Question</button>
             </div>
 
             <button type="submit">Create Quiz</button>
@@ -141,6 +149,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         let questionCount = 1; // Start with Question 1
 
         function addQuestion() {
+            if (questionCount > 10) {
+                return;
+            }
             const container = document.getElementById('questions-container');
 
             const questionDiv = document.createElement('div');
@@ -166,8 +177,28 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         // Automatically add the first question when the page loads
         document.addEventListener('DOMContentLoaded', () => {
-            addQuestion();
+            while (questionCount <= 10) {
+                addQuestion();
+            }
+        });
+
+        document.querySelector('form').addEventListener('submit', function(event) {
+            if (questionCount - 1 !== 10) {
+                alert('You must create exactly 10 questions before submitting the quiz.');
+                event.preventDefault();
+            }
         });
     </script>
 </body>
 </html>
+
+<?php
+// Server-side validation to ensure exactly 10 questions
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $questions = $_POST['questions'] ?? [];
+
+    if (count($questions) !== 10) {
+        die("Error: You must create exactly 10 questions for the quiz.");
+    }
+}
+?>

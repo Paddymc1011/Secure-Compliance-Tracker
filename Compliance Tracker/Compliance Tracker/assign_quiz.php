@@ -76,6 +76,16 @@ include __DIR__ . '/includes/header.php';
 
 <form method="POST">
     <div class="form-group">
+        <label for="category">Select Category:</label>
+        <select name="category" id="category" class="form-control" required>
+            <option value="">-- Select a Category --</option>
+            <option value="malware">Malware & Ransomware Attacks</option>
+            <option value="phishing">Phishing Attacks</option>
+            <option value="emerging">Emerging Threats</option>
+            <option value="iot">IoT Attacks</option>
+        </select>
+    </div>
+    <div class="form-group">
         <label for="quiz_id">Select Quiz:</label>
         <select name="quiz_id" id="quiz_id" class="form-control" required>
             <option value="">-- Select a Quiz --</option>
@@ -86,7 +96,6 @@ include __DIR__ . '/includes/header.php';
             <?php endforeach; ?>
         </select>
     </div>
-
     <div class="form-group">
         <label for="user_id">Assign to Employee:</label>
         <select name="user_id" id="user_id" class="form-control" required>
@@ -98,9 +107,10 @@ include __DIR__ . '/includes/header.php';
             <?php endforeach; ?>
         </select>
     </div>
-
     <button type="submit" name="assign_quiz" class="btn btn-primary">Assign Quiz</button>
 </form>
 </div>
+
+<?php include __DIR__ . '/includes/footer.php'; ?>
 
 <?php include __DIR__ . '/includes/footer.php'; ?>

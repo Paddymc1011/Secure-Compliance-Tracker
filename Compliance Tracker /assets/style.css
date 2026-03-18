@@ -1,0 +1,128 @@
+/* ==================================================
+   Compliance Tracker — adapted professional stylesheet
+   - Unified and cleaned version of the user's theme
+   - Ensures site classes (.site-header/.site-nav/.site-footer)
+   - Preserves .btn, .btn-primary and .btn-danger behavior
+   ================================================== */
+
+:root {
+  --primary: #2563eb;
+  --secondary: #64748b;
+  --dark: #0f172a;
+  --light: #f2f2f2;
+  --white: #ffffff;
+  --danger: #dc2626;
+  --muted: #6b7280;
+  --card-bg: #ffffff;
+  --border: rgba(15,23,36,0.06);
+  --shadow: 0 6px 20px rgba(2,6,23,0.04);
+  --transition: all 0.22s ease;
+  --header-height: 68px;
+  --footer-height: 56px;
+  --page-padding: 24px;
+  --max-content-width: 1100px;
+}
+
+/* Reset */
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { height: 100%; }
+body {
+  font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  color: var(--dark);
+  background: var(--light);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  padding: var(--page-padding);
+}
+
+.container { max-width: var(--max-content-width); margin: 0 auto; }
+
+/* Header */
+.site-header {
+  background: transparent;
+  border-bottom: 1px solid var(--border);
+  height: var(--header-height);
+  display: flex;
+  align-items: center;
+  margin-bottom: 20px;
+  padding: 10px 14px;
+}
+.header-inner { max-width: var(--max-content-width); margin: 0 auto; width: 100%; display:flex; align-items:center; justify-content:space-between }
+.site-title { font-size: 1.125rem; color: var(--primary); font-weight: 700; text-decoration: none }
+.site-nav ul { display:flex; gap: 12px; list-style:none; align-items:center }
+.site-nav a { color: var(--muted); text-decoration: none; font-weight:600; padding: 6px 8px }
+.site-nav a:hover { color: var(--primary) }
+
+/* Main */
+.site-main { max-width: var(--max-content-width); margin: 0 auto; min-height: calc(100vh - var(--header-height) - var(--footer-height) - (var(--page-padding) * 2)); padding: 20px; }
+
+/* Hero */
+.hero { padding: 48px 0; text-align: center; background: linear-gradient(135deg, rgba(255,255,255,0.9) 0%, rgba(239,246,255,0.8) 100%); }
+.hero h1 { font-size: 2.6rem; margin-bottom: .5rem }
+.hero p { color: var(--secondary); max-width: 720px; margin: .5rem auto 1.5rem }
+
+/* Cards */
+.card { background: var(--card-bg); border: 1px solid rgba(15,23,36,0.03); border-radius: 12px; padding: 20px; margin-bottom: 18px; box-shadow: var(--shadow); }
+.card h3 { margin-top: 0 }
+
+/* Buttons */
+.btn { display: inline-flex; align-items: center; gap: 8px; padding: .6rem .9rem; border-radius: 8px; font-weight: 700; cursor: pointer; transition: var(--transition); border: none }
+.btn-primary { background: var(--primary); color: var(--white) }
+.btn-primary:hover { transform: translateY(-2px); box-shadow: 0 10px 24px rgba(37,99,235,0.08) }
+.btn-ghost { background: transparent; color: var(--primary); border: 1px solid rgba(37,99,235,0.08) }
+.btn-danger { background: var(--danger); color: #fff }
+.btn-danger:hover { background: #b52b2f }
+.small { font-size: .85rem; padding: .35rem .6rem }
+form[action="admin_delete_user.php"] .btn-danger { padding: .45rem .7rem; font-size: .92rem }
+
+/* Features grid */
+.features { display: grid; grid-template-columns: repeat(2,1fr); gap: 18px; }
+@media (max-width: 860px) { .features { grid-template-columns: 1fr } }
+
+/* Decorative employee background */
+.employee-page { position: relative; overflow: hidden }
+.employee-page::before { content: ""; position: absolute; top: -12%; left: -12%; width: 700px; height: 700px; background: radial-gradient(circle at 30% 30%, rgba(37,99,235,0.08), transparent 28%), radial-gradient(circle at 70% 70%, rgba(16,185,129,0.04), transparent 25%); filter: blur(44px); pointer-events: none; z-index: 0 }
+.employee-page::after { content: ""; position: absolute; right: -8%; bottom: -8%; width: 520px; height: 520px; background: linear-gradient(135deg, rgba(37,99,235,0.03) 0%, rgba(99,102,241,0.02) 50%, rgba(16,185,129,0.03) 100%); filter: blur(28px); pointer-events: none; z-index: 0 }
+.employee-page > .login-card { position: relative; z-index: 1 }
+
+/* Tables */
+.table-responsive { overflow: auto; width: 100%; border-radius: 8px }
+.table { width: 100%; border-collapse: collapse; margin: 0; font-size: .95rem; border-radius: 8px; overflow: hidden }
+.table thead th { background: var(--card-bg); color: #0b1220; text-align: left; padding: 14px 16px; border-bottom: 1px solid var(--border); font-weight: 700 }
+.table tbody td { padding: 14px 16px; border-bottom: 1px solid rgba(15,23,36,0.04); background: var(--card-bg) }
+.table tbody tr:hover { background: rgba(11,94,215,0.03) }
+.table td code { display: block; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 420px }
+.padded-table-container { padding: 12px; background: transparent; border-radius: 6px }
+.data-table thead th { background: #f7fbff; padding: 12px 16px; border-bottom: 2px solid rgba(11,94,215,0.03) }
+.data-table tbody td { padding: 12px 16px; border-bottom: 1px solid #eef6ff }
+.btn-action { background: var(--primary); color: #fff; padding: 8px 12px; border-radius: 8px; border: none }
+
+/* Alerts, utilities */
+.alert { padding: 12px; border-radius: 8px }
+.alert-success { background: #e8f9ef; color: #054e2c }
+.alert-error { background: #fff0f0; color: #6b0f11 }
+.muted { color: var(--muted) }
+.right { display:flex; align-items:center; gap:12px }
+.mb-12 { margin-bottom: 12px }
+.mt-12 { margin-top: 12px }
+.sr-only { position: absolute; width:1px; height:1px; padding:0; margin:-1px; overflow:hidden; clip:rect(0,0,0,0); border:0 }
+
+/* Footer */
+.site-footer { background: transparent; border-top: 1px solid var(--border); height: var(--footer-height); display:flex; align-items:center; justify-content:center; margin-top:20px; padding: 10px 14px; color: var(--muted) }
+
+/* Focus states */
+a:focus, button:focus { outline: 3px solid rgba(37,99,235,0.14); outline-offset: 3px }
+
+/* small screens */
+@media (max-width: 600px) {
+  :root { --page-padding: 12px }
+  .site-header, .site-footer { height: auto; padding: 12px }
+  .site-main { padding: 12px }
+  .site-title { font-size: 1rem }
+}
+
+/* Strong selectors to ensure delete buttons stay red when mixed with older rules */
+button.btn-danger, .btn.btn-danger { background: var(--danger) !important; color: #fff !important }
+button.btn-danger:hover, .btn.btn-danger:hover { background: #b52b2f !important }
+
+/* End */

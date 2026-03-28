@@ -5,7 +5,10 @@
 header('Content-Type: application/json');
 
 // Your Solana devnet RPC endpoint (Triton/RPCPool)
-$rpcUrl = 'https://nyc252.nodes.rpcpool.com';
+//$rpcUrl = 'https://api.devnet.solana.com'; // Use Solana devnet for testing
+
+// Update the RPC URL to use the custom ngrok-forwarded endpoint
+$rpcUrl = 'https://supereminently-ghostlier-annalise.ngrok-free.dev';
 
 $requestBody = json_encode([
     'jsonrpc' => '2.0',
@@ -57,16 +60,18 @@ if ($httpCode !== 200) {
     exit;
 }
 
+
 $data = json_decode($response, true);
 if (!isset($data['result']['value']['blockhash'], $data['result']['value']['lastValidBlockHeight'])) {
     http_response_code(500);
     echo json_encode([
         'success' => false,
-        'error'   => 'Unexpected RPC response: ' . $response,
+        'error'   => 'Invalid RPC response',
     ]);
     exit;
 }
 
+// Return a single JSON response
 echo json_encode([
     'success'              => true,
     'blockhash'            => $data['result']['value']['blockhash'],

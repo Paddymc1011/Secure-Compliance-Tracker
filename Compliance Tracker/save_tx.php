@@ -26,15 +26,15 @@ if (!$connection) {
 	exit;
 }
 
+// Use transaction_id column for storing Solana tx signature
 $stmt = $connection->prepare("UPDATE quiz_submissions SET transaction_id = ? WHERE submission_id = ?");
 $stmt->bind_param('si', $txid, $submission_id);
 
 if ($stmt->execute()) {
-	echo json_encode(['success' => true]);
+    echo json_encode(['success' => true]);
 } else {
-	http_response_code(500);
-	echo json_encode(['success' => false, 'message' => 'Update failed']);
+    http_response_code(500);
+    echo json_encode(['success' => false, 'message' => 'DB update failed']);
 }
 
 $stmt->close();
-?>

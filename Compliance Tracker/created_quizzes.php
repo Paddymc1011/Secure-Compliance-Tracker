@@ -1,5 +1,8 @@
 <?php
 session_start();
+// Use the main background on the created quizzes page
+$pageClass = 'main-bg';
+
 require_once __DIR__ . '/dbcon.php';
 require_once __DIR__ . '/auth.php';
 

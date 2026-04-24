@@ -5,6 +5,9 @@ ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 
 session_start();
+// Use the main background on the quiz creation page
+$pageClass = 'main-bg';
+
 require_once 'dbcon.php';
 require_once 'auth.php';
 
@@ -68,7 +71,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <style>
         body {
             font-family: Arial, sans-serif;
-            background-color: #f4f4f9;
+            background: url('Images/mainbackground.png') no-repeat center center fixed;
+            background-size: cover;
             margin: 0;
             padding: 0;
         }
@@ -89,12 +93,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             margin: 10px 0 5px;
             color: #555;
         }
-        input[type="text"], input[type="date"], input[type="number"] {
+        input[type="text"], input[type="date"], input[type="number"], select {
             width: 100%;
             padding: 10px;
             margin-bottom: 15px;
             border: 1px solid #ccc;
             border-radius: 4px;
+            box-sizing: border-box; /* prevent inputs from overflowing the container */
         }
         button {
             background-color: #007BFF;

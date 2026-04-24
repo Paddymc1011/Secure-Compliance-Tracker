@@ -1,7 +1,7 @@
 <?php
 require_once __DIR__ . '/config.php';
 
-// Authenticate user by username/email and password
+// Authenticate user by username and password
 function attempt_login($identifier, $password) {
     global $connection;
     $sql = "SELECT id, username, email, password, role FROM users WHERE username = ? OR email = ? LIMIT 1";
